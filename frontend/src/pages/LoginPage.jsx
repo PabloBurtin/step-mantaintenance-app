@@ -20,9 +20,9 @@ const LoginPage = () => {
         try {
             const data = await authService.login(email, password)
             login(data.user, data.accessToken, data.refreshToken)
-            if (user.email === 'diego.rodriguez@stepservicios.com') {
+            if (data.user.email === 'diego.rodriguez@stepservicios.com') {
                 window.location.href = 'https://www.youtube.com/watch?v=_fI3qL_g698'
-            } else if (user.email === 'sergio.vilche@stepservicios.com') {
+            } else if (data.user.email === 'sergio.vilche@stepservicios.com') {
                  window.location.href = 'https://www.youtube.com/shorts/wTKlN9lMs6c'
             } else{
             navigate('/')
