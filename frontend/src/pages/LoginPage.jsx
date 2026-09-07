@@ -13,7 +13,7 @@ const LoginPage = () => {
     const { login } = useAuth()
     const navigate = useNavigate()
 
-    /*const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
 
@@ -30,38 +30,8 @@ const LoginPage = () => {
         } finally {
             setLoading(false)
         }
-    }*/
-
-    const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    let prankUrl = null
-
-    try {
-        const data = await authService.login(email, password)
-        login(data.user, data.accessToken, data.refreshToken)
-        if (data.user.email === 'diego.rodriguez@stepservicios.com') {
-            prankUrl = 'https://www.youtube.com/watch?v=_fI3qL_g698'
-        } else if (data.user.email === 'sergio.vilche@stepservicios.com') {
-            prankUrl = 'https://www.youtube.com/shorts/wTKlN9lMs6c'
-        }
-    } catch (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error al ingresar',
-            text: error.response?.data?.message || 'Credenciales inválidas'
-        })
-        setLoading(false)
-        return
     }
 
-    setLoading(false)
-    if (prankUrl) {
-        window.location.href = prankUrl
-    } else {
-        navigate('/')
-    }
-}
 
     return (
         <Container className= "d-flex justify-content-center align-items-center vh100">
