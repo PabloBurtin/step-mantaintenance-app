@@ -11,6 +11,8 @@ import RemitosPage from './pages/RemitosPage.jsx'
 import UsuariosPage from './pages/UsuariosPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import CrearRemitoPage from './pages/CrearRemitoPage.jsx'
+import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage/>} />
         <Route path='/register' element={<RegisterPage/>} />
+        <Route path='/forgot-password' element={<ForgotPasswordPage/>} />
+        <Route path='/reset-password/:token' element={<ResetPasswordPage/>} /> 
 
         <Route path= "/" element={
           <PrivateRoute>
@@ -31,7 +35,7 @@ function App() {
           <Route path="remitos" element={<RemitosPage/>} />
           <Route path='remitos/nuevo'element={<CrearRemitoPage/>} />
           <Route path="usuarios" element={
-            <PrivateRoute roles={['admin']}>
+            <PrivateRoute roles={['admin', 'gerente']}>
               <UsuariosPage />
             </PrivateRoute>
             } />

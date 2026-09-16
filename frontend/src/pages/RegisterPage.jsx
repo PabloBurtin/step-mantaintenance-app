@@ -62,8 +62,8 @@ const RegisterPage = () => {
     }
 
     return (
-        <Container className="d-flex justify-content-center align-items-center vh-100">
-            <Card style={{ width: '450px'}} className="p-4 shadow">
+        <Container className="auth-container">
+            <Card className="register-card p-4 shadow">
                 <Card.Body>
                     <h4 className="text-center mb-4">Crear cuenta</h4>
                     <Form onSubmit={handleSubmit}>

@@ -38,3 +38,17 @@ export const verifySupervisor = (req, res, next) => {
     }
     next();
 };
+
+export const verifyAdminGerente = (req, res, next) => {
+    if (!['admin', 'gerente'].includes(req.user.rol)) {
+        return res.status(403).json({ message: 'Acceso denegado' });
+    }
+    next();
+};
+
+export const verifyGerente = (req, res, next) => {
+    if (!['admin', 'Supervisor', 'gerente'].includes(req.user.rol)) {
+        return res.status(403).json({ message: 'Acceso denegado' })
+    }
+    next();
+}

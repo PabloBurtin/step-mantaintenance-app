@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     },
     rol: {
         type: String,
-        enum: ['admin', 'Supervisor', 'tecnico'],
+        enum: ['admin', 'gerente', 'Supervisor', 'tecnico'],
         default: 'tecnico'
     },
     activo: {
@@ -39,7 +39,15 @@ const userSchema = new mongoose.Schema({
     pedidosAsignados: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Pedido'
-    }]
+    }],
+    resetPasswordToken:{
+        type: String,
+        default: null
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: null
+    }
 }, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);

@@ -1,0 +1,20 @@
+@use 'variables' as *;
+
+.modal-remito-body {
+    background-color: $bg-modal-remito;
+    padding: 20px;
+}
+
+.item-numero {
+    min-width: $item-numero-min-width;
+}
+
+.firma-canvas-container {
+    border: 1px solid $border-input;
+    border-radius: $border-radius-input;
+    background-color: $bg-firma;
+}
+
+.crear-remito-container {
+    max-width: $crear-remito-max-width;
+}

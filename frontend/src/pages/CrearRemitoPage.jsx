@@ -20,7 +20,7 @@ const CrearRemitoPage = () => {
     const [form, setForm] = useState({
         cliente: location.state?.clienteId || '',
         local: location.state?.localId || '',
-        fecha: new Date().toISOString().split('T')[0],
+        fecha: new Date().toLocaleDateString('en-CA'),
         aclaracion: '',
         ordenDeCompra: location.state?.ordenDeCompra || ''
     })
@@ -107,7 +107,7 @@ const CrearRemitoPage = () => {
     }
 
     return (
-        <Container className="py-4" style={{ maxWidth: '700px' }}>
+        <Container className="py-4 crear-remito-container">
             <div className="d-flex align-items-center mb-4 gap-3">
                 <Button variant="outline-secondary" size="sm" onClick={() => navigate(-1)}>← Volver</Button>
                 <h2 className="mb-0">Nuevo Remito</h2>
@@ -147,7 +147,7 @@ const CrearRemitoPage = () => {
                         <Form.Label>Trabajos realizados</Form.Label>
                         {items.map((item, i) => (
                             <div key={i} className="d-flex align-items-center mb-2">
-                                <span className="me-2 text-muted fw-bold" style={{ minWidth: '22px' }}>{i + 1}.</span>
+                                <span className="me-2 text-muted fw-bold item-numero">{i + 1}.</span>
                                 <Form.Control
                                     value={item}
                                     onChange={(e) => handleItemChange(i, e.target.value)}
@@ -178,7 +178,7 @@ const CrearRemitoPage = () => {
 
                         <Form.Group className="mb-3">
                             <Form.Label>Firma del cliente</Form.Label>
-                            <div style={{ border: '1px solid #ced4da', borderRadius: '4px', backgroundColor: '#fff' }}>
+                            <div className='firma-canvas-container'>
                                 <SignatureCanvas
                                     ref={sigRef}
                                     penColor="black"

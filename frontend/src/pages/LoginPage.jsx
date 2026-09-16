@@ -4,6 +4,7 @@ import { Container, Card, Form, Button } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../services/authService.js";
+import logo from "../assets/logo-step.png"
 
 const LoginPage = () => {
     const [email, setEmail] = useState('')
@@ -34,10 +35,12 @@ const LoginPage = () => {
 
 
     return (
-        <Container className= "d-flex justify-content-center align-items-center vh100">
-            <Card style={{width: '400px'}} className="p-4 shadow">
+        <Container className= "auth-container">
+            <Card className="login-card p-4 shadow">
                 <Card.Body>
-                    <h4 className="text-center mb-4">Step Servicios SA</h4>
+                    <div className="auth-logo-container">
+                        <img src={logo} alt="Step Servicios SA" className="auth-logo" />
+                    </div>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>

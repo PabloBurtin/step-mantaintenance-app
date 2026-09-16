@@ -18,6 +18,16 @@ const authService = {
     changePassword: async (passwordActual, passwordNuevo) => {
         const { data } = await api.patch('/auth/change-password', { passwordActual, passwordNuevo })
         return data
+    },
+    
+    forgotPassword: async (email) => {
+        const { data } = await api.post ('/auth/forgot-password', { email })
+        return data
+    },
+
+    resetPassword: async (token, password) => {
+        const { data } = await api.post(`/auth/reset-password/${token}`, { password })
+        return data
     }
 }
 

@@ -1,0 +1,45 @@
+@use 'variables' as *;
+
+body{
+    background-color: $color-bg;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    margin: 0;
+}
+
+.fila-clickeable{
+    cursor: pointer;
+}
+
+* {
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: $font-weight-bold;
+    color: $color-text;
+}
+
+//Badges de rol
+.badge-rol-admin {
+    background-color: $color-admin;
+    color: $color-white;
+}
+
+.badge-rol-gerente {
+    background-color: $color-gerente;
+    color: $color-white;
+}
+
+.badge-rol-supervisor {
+    background-color: $color-supervisor;
+    color: #000;
+}
+
+.badge-rol-tecnico {
+    background-color: $color-tecnico;
+    color: $color-white;
+}

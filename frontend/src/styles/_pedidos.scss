@@ -1,0 +1,13 @@
+@use 'variables' as *;
+
+.filtro-estado {
+    max-width: $filtro-estado-max-width;
+}
+
+.filtro-tecnico {
+    max-width: $filtro-tecnico-max-width;
+}
+
+.select-estado {
+    min-width: $select-estado-min-width;
+}

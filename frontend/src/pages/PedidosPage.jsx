@@ -27,7 +27,8 @@ const estadoVariant = {
 
 const PedidosPage = () => {
     const { user } = useAuth()
-    const esSupervisor = ['admin', 'Supervisor'].includes(user?.rol)
+    const esSupervisor = ['admin', 'Supervisor', 'gerente'].includes(user?.rol)
+    const puedeEliminar = user?.rol === 'admin'
 
     const [pedidos, setPedidos] = useState([])
     const [clientes, setClientes] = useState([])
@@ -39,6 +40,8 @@ const PedidosPage = () => {
     const [pedidoDetalle, setPedidoDetalle] = useState(null)
     const [editando, setEditando] = useState(null)
     const [form, setForm] = useState(initialForm)
+    const [filtroEstado, setFiltroEstado] = useState('')
+    const [filtroTecnico, setFiltroTecnico] = useState('')
     const [clienteTieneLocales, setClienteTieneLocales] = useState(false)
 
     const cargarPedidos = async () => {
@@ -54,6 +57,7 @@ const PedidosPage = () => {
 
     useEffect(() => {
         cargarPedidos()
+        userService.getAll().then (data => setUsuarios(data.data || data)).catch(() => {})
     }, [])
 
     useEffect(() => {
@@ -194,6 +198,15 @@ const PedidosPage = () => {
 
     const navigate = useNavigate()
 
+    const pedidosFiltrados = pedidos.filter(p => {
+        if (filtroEstado && p.estado !== filtroEstado) return false
+        if (filtroTecnico) {
+            const tecnicoId = p.asignadoA?.id || p.asignadoA?._id || p.asignadoA
+            if (tecnicoId !== filtroTecnico) return false
+        }
+        return true
+    })
+
     return (
         <Container>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -202,6 +215,24 @@ const PedidosPage = () => {
                     <Button variant="primary" onClick={() => abrirModal()}> ➕ Nuevo Pedido</Button>
                 )}
             </div>
+
+            {esSupervisor && (
+                <div className="d-flex gap-3 mb-3">
+                    <Form.Select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} className="filtro-estado">
+                        <option value="">Todolos estados</option>
+                        <option>Pendiente</option>
+                        <option>En curso</option>
+                        <option>Finalizado</option>
+                        <option>Cancelado</option>
+                    </Form.Select>
+                    <Form.Select value={filtroTecnico} onChange={e => setFiltroTecnico(e.target.value)} className="filtro-tecnico">
+                        <option value="">Todos los técnicos</option>
+                        {usuarios.map(u => (
+                            <option key={u.id} value={u.id}>{u.nombre} {u.apellido}</option>
+                        ))}
+                    </Form.Select>
+                </div>
+            )}
 
             {loading ? (
                 <p>Cargando...</p>
@@ -219,8 +250,8 @@ const PedidosPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {pedidos.map(pedido => (
-                            <tr key={pedido.id} style={{ cursor: 'pointer' }} onClick={() => abrirDetalle(pedido)}>
+                        {pedidosFiltrados.map(pedido => (
+                            <tr key={pedido.id} className="fila-clickeable" onClick={() => abrirDetalle(pedido)}>
                                 <td>{pedido.numero}</td>
                                 <td>{pedido.cliente?.nombre}</td>
                                 <td>{pedido.local?.nombre || '-'}</td>
@@ -231,7 +262,7 @@ const PedidosPage = () => {
                                         size="sm"
                                         value={pedido.estado}
                                         onChange={(e) => handleEstado(pedido.id, e.target.value)}
-                                        style={{ minWidth: '120px'}}
+                                        className="select-estado"
                                     >
                                         <option>Pendiente</option>
                                         <option>En curso</option>
@@ -243,7 +274,9 @@ const PedidosPage = () => {
                                     {esSupervisor && (
                                         <>
                                             <Button size="sm" variant="outline-primary" className="me-2" onClick={() => abrirModal(pedido)}> Editar</Button>
-                                            <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(pedido.id, pedido.numero)}>Eliminar</Button>
+                                            {puedeEliminar && (
+                                                <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(pedido.id, pedido.numero)}>Eliminar</Button>
+                                            )}
                                         </>
                                     )}
                                 </td>

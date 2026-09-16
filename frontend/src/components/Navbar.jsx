@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../services/authService.js";
+import logo from '../assets/logo-step.png';
 
 const Navbar = () => {
     const { user, logout } = useAuth()
@@ -33,15 +34,17 @@ const Navbar = () => {
     return (
         <BsNavbar bg="dark" variant="dark" expand="lg">
             <Container>
-                <BsNavbar.Brand as={Link} to="/">Step Servicios</BsNavbar.Brand>
+                <BsNavbar.Brand as={Link} to="/">
+                    <img src={logo} alt="Step Servicios SA" style={{ height: '38px', width: 'auto' }} />
+                </BsNavbar.Brand>
                 <BsNavbar.Toggle />
                 <BsNavbar.Collapse>
                     <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
+                        <Nav.Link as={Link} to="/">Inicio</Nav.Link>
                         <Nav.Link as={Link} to="/clientes">Clientes</Nav.Link>
                         <Nav.Link as={Link} to="/pedidos">Pedidos</Nav.Link>
                         <Nav.Link as={Link} to="/remitos">Remitos</Nav.Link>
-                        {user?.rol ==='admin' && (
+                        {['admin', 'gerente'].includes(user?.rol) && (
                             <Nav.Link as={Link} to="/usuarios">Usuarios</Nav.Link>
                         )}
                     </Nav>

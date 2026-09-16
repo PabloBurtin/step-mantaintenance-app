@@ -9,7 +9,7 @@ export default class UserDAO extends BaseDAO {
     findByEmail = async (email) => {
         try {
             return await this.model.findOne({ email });
-        } catch (erro) {
+        } catch (error) {
             throw new Error(`Error al encontrar usuario por email: ${error.message}`);
         }
     }

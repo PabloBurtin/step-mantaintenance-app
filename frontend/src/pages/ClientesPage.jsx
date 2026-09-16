@@ -4,6 +4,7 @@ import { Container, Table, Button, Modal, Form, Badge } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import clienteService from "../services/clienteService.js"
+import { useAuth } from "../context/AuthContext.jsx"
 
 const initialForm = {
     nombre: '',
@@ -23,6 +24,7 @@ const ClientesPage = () => {
     const [showModal, setShowModal] = useState(false)
     const [editando, setEditando] = useState(null)
     const [form, setForm] = useState(initialForm)
+    const { user } = useAuth()
 
     const cargarClientes = async () => {
         try{
@@ -127,7 +129,9 @@ const ClientesPage = () => {
         <Container>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Clientes</h2>
-                <Button variant="primary" onClick={handleNuevo}>+ Nuevo Cliente</Button>
+                {['admin', 'gerente'].includes(user?.rol) && (
+                    <Button variant="primary" onClick={handleNuevo}>+ Nuevo Cliente</Button>
+                )}
             </div>
 
             {loading ? (
@@ -163,9 +167,11 @@ const ClientesPage = () => {
                                     <Button size= "sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(cliente)}>
                                         Editar
                                     </Button>
-                                    <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(cliente.id, cliente.nombre)}>
-                                        Eliminar
-                                    </Button>
+                                    {user?.rol === 'admin' && (
+                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(cliente.id, cliente.nombre)}>
+                                            Eliminar
+                                        </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}

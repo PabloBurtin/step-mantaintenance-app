@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import localService from "../services/localService.js";
 import clienteService from "../services/clienteService.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const initialForm = {
     nombre: '',
@@ -23,6 +24,7 @@ const LocalesPage = () => {
     const [showModal, setShowModal] = useState(false)
     const [editando, setEditando] = useState(null)
     const [form, setForm] = useState(initialForm)
+    const { user } = useAuth()
 
     const cargarDatos = async () => {
         try {
@@ -170,7 +172,9 @@ const LocalesPage = () => {
                                 </td>
                                 <td>
                                     <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(local)}>Editar</Button>
-                                    <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(local.id, local.nombre)}> Eliminar</Button>
+                                    {user?.rol === 'admin' && (
+                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(local.id, local.nombre)}> Eliminar</Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}

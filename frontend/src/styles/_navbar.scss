@@ -1,0 +1,28 @@
+@use 'variables' as *;
+
+.navbar{
+    background-color: $color-dark !important;
+
+    .navbar-brand img {
+        height: $navbar-logo-height;
+        width: auto
+    }
+
+    .nav-link {
+        color: rgba(255,255, 0.85) !important;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $color-gold !important;
+        }
+    }
+
+    .navbar-toggler {
+        border-color: $color-gold;
+    }
+
+    .dropdown-item:hover {
+        background-color: $color-gold;
+        color: $color-white;
+    }
+} 

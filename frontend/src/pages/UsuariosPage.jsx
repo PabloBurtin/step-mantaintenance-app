@@ -14,7 +14,7 @@ const initialForm = {
     rol: 'tecnico'
 }
 
-const ROLES = ['admin', 'Supervisor', 'tecnico']
+const ROLES = ['admin', 'gerente', 'Supervisor', 'tecnico']
 
 const UsuariosPage = () => {
     const { user: usuarioActual } = useAuth()
@@ -136,8 +136,13 @@ const UsuariosPage = () => {
     }
 
     const badgeRol = (rol) => {
-        const colores = { admin: 'danger', Supervisor: 'warning', tecnico: 'primary' }
-        return <Badge bg={colores[rol] || 'secondary'}>{rol}</Badge>
+        const clases = {
+            admin: 'badge-rol-admin',
+            gerente: 'badge-rol-gerente',
+            Supervisor: 'badge-rol-supervisor',
+            tecnico: 'badge-rol-tecnico'
+        }
+        return <Badge className={clases[rol] || ''} bg="">{rol}</Badge>
     }
 
     return (
@@ -168,12 +173,16 @@ const UsuariosPage = () => {
                                 <td>{usuario.celular || '-'}</td>
                                 <td>{badgeRol(usuario.rol)}</td>
                                 <td>
-                                    <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(usuario)}>
-                                        Editar
-                                    </Button>
-                                    <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(usuario)} disabled={usuario.id === usuarioActual.id}>
-                                        Eliminar
-                                    </Button>
+                                    {!(usuarioActual?.rol === 'gerente' && usuario.rol ==='admin') && (
+                                        <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(usuario)}>
+                                            Editar
+                                        </Button>
+                                    )}
+                                    {usuarioActual?.rol ==='admin' && (
+                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(usuario)} disabled={usuario.id === usuarioActual.id}>
+                                            Eliminar
+                                        </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}

@@ -1,0 +1,167 @@
+@use 'variables' as *;
+
+.remito-print {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    padding: 8mm;
+    max-width: 210mm;
+    margin: 0 auto;
+    box-sizing: border-box;
+    color: #000;
+    background-color: #fff;
+
+    //Celda base
+    .celda{
+        border: 1px solid #000;
+        padding: 3px 6px;
+
+        &.celda-border-bottom { border-bottom: 1px solid #000; }
+        &.celda-center { text-align: center; }
+        &.celda-w60 { width: 60%; }
+        &.celda.item-num { width: 45px; }
+    }
+
+    //Cabecera
+    .remito-header {
+        display: flex;
+        border:1px solid #000;
+        align-items: stretch;
+        margin-bottom: 6px;
+    }
+
+    .remito-header-izq {
+        flex: 1;
+        padding: 6px 8px;
+        border-right: 1px solid #000;
+    }
+
+    .remito-logo {
+        max-height: 70px;
+        width: auto;
+        max-width: 180px;
+        display: block;
+    }
+
+    .remito-empresa-info {
+        font-size: 9px;
+        line-height: 1.5;
+        margin-top: 4px;
+    }
+
+    .remito-iva {
+        font-weight: bold;
+        margin-top: 3px;
+    }
+
+    .remito-header-centro {
+        width: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid #000;
+        font-size: 32px;
+        font-weight: bold;
+        align-self: stretch;
+    }
+
+    .remito-header-der {
+        flex: 1;
+        padding: 6px 8px;
+        text-align: right;
+    }
+
+    .remito-titulo {
+        font-size: 18px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .remito-no-factura {
+        font-size: 8px;
+        margin-bottom: 4px;
+    }
+
+    .remito-numero {
+        font-size: 10px;
+        margin-top: 4px;
+    }
+
+    .remito-fecha {
+        font-size: 9px;
+        margin-top: 8px;
+    }
+
+    .remito-fiscal {
+        font-size: 8px;
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    //Tablas
+    .remito-tabla {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 4px;
+    }
+
+    .remito-tabla-items {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: -1px;
+    }
+
+    .remito-items-header {
+        background-color: #bdbdbd;
+    }
+
+    .remito-fila-item {
+        height: 20px;
+    }
+
+    .remito-tabla-oc {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 4px;
+        margin-top: -1px;
+    }
+
+    //Firmas
+    .remito-firmas-container {
+        border: 1px solid #000;
+        margin-top: -1px;
+        padding: 8px 12px;
+    }
+
+    .remito-firmas {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    .remito-firma-col {
+        flex: 1;
+
+        p{
+            margin: 0 0 4px;
+            font-size: 10px;
+        }
+    }
+
+    .remito-firma-img {
+        height: 60px;
+        border: 1px solid #ccc;
+        display: block;
+    }
+
+    .remito-firma-linea {
+        border-bottom: 1px solid #000;
+        height: 60px;
+    }
+
+    .remitor-aclaracion {
+        border-bottom: 1px solid #000;
+        height: 60px;
+        padding-top: 40px;
+    }
+}

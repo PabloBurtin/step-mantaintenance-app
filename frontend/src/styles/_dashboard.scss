@@ -1,0 +1,65 @@
+@use 'variables' as *;
+
+.dashboard-welcome{
+    background-color: $color-dark;
+    color: $color-white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border-left: 4px solid $color-gold;
+
+    h2 {
+        color: $color-white;
+        margin-bottom: 0.25rem;
+    }
+
+    .dashboard-rol {
+        color: $color-gold;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+}
+
+.dashboard-card {
+    background-color: $color-white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: $color-text;
+    transition: border-color 0.2s ease, box-shadow 0.2 ease, transform 0.15 ease;
+    cursor: pointer;
+    display: block;
+    width: 200px;
+
+    &:hover {
+        border-color: $color-gold;
+        box-shadow: 0 4px 12px rgba(202, 166, 97, 0.2);
+        transform: translateY(-2px);
+        color: $color-text;
+    }
+
+    .dashboard-card-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .dashboard-card-title {
+        font-weight: $font-weight-bold;
+        font-size: 15px;
+        margin-bottom: 0.25rem;
+    }
+
+    .dashboard-card-desc {
+        font-size: $font-size-sm;
+        color: #888;
+    }
+}

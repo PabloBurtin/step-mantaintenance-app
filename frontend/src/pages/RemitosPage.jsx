@@ -14,7 +14,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 const initialForm = {
     cliente: '',
     local: '',
-    fecha: new Date().toISOString().split('T')[0],
+    fecha: new Date().toLocaleDateString('en-CA'),
     aclaracion: '',
     ordenDeCompra: ''
 }
@@ -244,9 +244,9 @@ const RemitoPage = () => {
                     </thead>
                     <tbody>
                         {remitos.map(remito => (
-                            <tr key={remito.id} style={{ cursor: 'pointer' }} onClick={() => abrirDetalle(remito)}>
+                            <tr key={remito.id} className="fila-clickeable" onClick={() => abrirDetalle(remito)}>
                                 <td>{remito.numero}</td>
-                                <td>{remito.fecha ? new Date(remito.fecha).toLocaleDateString('es-AR'): '-'}</td>
+                                <td>{remito.fecha ? new Date(remito.fecha).toLocaleDateString('es-AR', { timeZone: 'UTC' }): '-'}</td>
                                 <td>{remito.cliente?.nombre}</td>
                                 <td>{remito.local?.nombre || '-'}</td>
                                 <td onClick={e => e.stopPropagation()}>
@@ -264,7 +264,7 @@ const RemitoPage = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Remito #{remitoVista?.numero}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{ backgroundColor: '#f0f0f0', padding: '20px'}}>
+                <Modal.Body className="modal-remito-body">
                     {loadingDetalle ? (
                         <p className="text-center">Cargando...</p>
                     ) : (
@@ -317,7 +317,7 @@ const RemitoPage = () => {
                         <Form.Label>Trabajos realizados</Form.Label>
                         {items.map((item, i) => (
                             <div key={i} className="d-flex align-items-center mb-2">
-                                <span className="me-2 text-muted fw-bold" style={{ minWidth:'22px' }}>{i + 1}.</span>
+                                <span className="me-2 text-muted fw-bold item-numero">{i + 1}.</span>
                                 <Form.Control
                                     value={item}
                                     onChange={(e) => handleItemChange(i, e.target.value)}
@@ -344,7 +344,7 @@ const RemitoPage = () => {
                         <div className="row -mt-2">
                             <div className="col-12 mb-3">
                                 <Form.Label>Firma del cliente</Form.Label>
-                                <div style={{ border: '1px solid #ced4da', borderRadius: '4px', backgroundColor: '#fff' }}>
+                                <div className="firma-canvas-container">
                                     <SignatureCanvas
                                         ref={sigRef}
                                         penColor="black"

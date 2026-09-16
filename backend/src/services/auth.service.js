@@ -1,6 +1,8 @@
 import UserService from './user.service.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/jwt.js';
+import crypto from 'crypto';
+import User from '../models/User.js'
 
 export default class AuthSevice {
     constructor () {
@@ -64,5 +66,37 @@ export default class AuthSevice {
 
         const hashedPassword = await hashPassword(passwordNuevo);
         return await this.userService.updateUser(userId, { password: hashedPassword });
+    }
+
+    forgotPassword = async (email) => {
+        const user = await this.userService.getUserByEmail(email);
+        if(!user) throw new Error('Usuerio no encontrado')
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 60 *60 * 1000);
+
+        await this.userService.updateUser(user.id, {
+            resetPasswordToken: token,
+            resetPasswordExpires: expires
+        });
+
+        return { token, user };
+    }
+
+    resetPassword = async (token, nuevaPassword) => {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: new Date() }
+        });
+
+        if (!user) throw new Error ('Token inválido o expirado');
+
+        const hashedPassword = await hashPassword(nuevaPassword);
+        user.password = hashedPassword;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        await user.save();
+
+        return user;
     }
 }

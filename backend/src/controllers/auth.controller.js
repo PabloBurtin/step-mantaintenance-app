@@ -1,4 +1,5 @@
 import AuthSevice from "../services/auth.service.js";
+import { sendResetPasswordEmail } from "../services/email.service.js";
 
 const authService = new AuthSevice();
 
@@ -68,5 +69,41 @@ export default class AuthController {
             status: 'success',
             message: 'Sesión cerrada'
         });
+    }
+
+    static forgotPassword = async (req, res) => {
+        try {
+            const { email } = req.body;
+            if (!email) return res.status(400).json({ message: 'Se requiere el email' });
+
+            const { token, user } = await authService.forgotPassword(email);
+
+            const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+            await sendResetPasswordEmail(user.email, resetUrl);
+
+            return res.status(200).json({ message: 'Se envió el correo de recuperación' });
+        } catch (error) {
+            if (error.message === 'Usuario no encontrado') {
+                return res.status(200).json({ message: 'Se envió el correo de recuperación' });
+            }
+            return res.status(500).json ({ message: error.message });
+        }
+    }
+
+    static resetPassword = async (req, res) => {
+        try{
+            const { token } = req.params;
+            const { password } = req.body;
+            if (!password) return res.status(400).json ({ message: 'Se requiere la contraseña' });
+
+            await authService.resetPassword(token, password);
+            
+            return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+        } catch (error) {
+            if (error.message === 'Token inválido o expirado') {
+                return res.status(400).json({ message: error.message });
+            }
+            return res.status(500).json({ message: error.message });
+        }
     }
 }
