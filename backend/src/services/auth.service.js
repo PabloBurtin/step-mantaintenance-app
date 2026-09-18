@@ -3,6 +3,7 @@ import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/jwt.js';
 import crypto from 'crypto';
 import User from '../models/User.js'
+import PendingUser from '../models/PendingUser.js';
 
 export default class AuthSevice {
     constructor () {
@@ -10,18 +11,23 @@ export default class AuthSevice {
     }
 
     register = async (userData) => {
-        const hashedPassword = await hashPassword(userData.password);
+        const existingUser = await this.userService.getUserByEmail(userData.email).catch(() => null)
+        if (existingUser) throw new Error ('El usuario ya existe');
 
-        const user = await this.userService.createUser({
+        await PendingUser.deleteOne({ email: userData.email })
+
+        const hashedPassword = await hashPassword(userData.password);
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        await PendingUser.create({
             ...userData,
-            password: hashedPassword
+            password: hashedPassword,
+            verificationToken,  
+            expiresAt
         });
 
-        const payload = { id: user.id, rol: user.rol };
-        const accessToken = generateAccessToken(payload);
-        const refreshToken = generateRefreshToken(payload);
-
-        return { user, accessToken, refreshToken };
+        return { verificationToken };
     }
 
     login = async (email, password) => {
@@ -96,6 +102,27 @@ export default class AuthSevice {
         user.resetPasswordToken = null;
         user.resetPasswordExpires = null;
         await user.save();
+
+        return user;
+    }
+
+    verifyEmail = async (token) => {
+        const pending = await PendingUser.findOne({
+            verificationToken: token,
+            expiresAt: { $gt: new Date() }
+        });
+
+        if (!pending) throw new Error ('Token inválido o expirado');
+
+        const user = await this.userService.createUser({
+            nombre: pending.nombre,
+            apellido: pending.apellido,
+            email: pending.email,
+            celular: pending.celular,
+            password: pending.password,
+            rol: pending.rol
+        });
+        await PendingUser.deleteOne({_id: pending.id})
 
         return user;
     }

@@ -1,5 +1,5 @@
 import AuthSevice from "../services/auth.service.js";
-import { sendResetPasswordEmail } from "../services/email.service.js";
+import { sendResetPasswordEmail, sendVerificationEmail } from "../services/email.service.js";
 
 const authService = new AuthSevice();
 
@@ -7,16 +7,16 @@ export default class AuthController {
     static register = async (req, res) => {
         try {
             const { nombre, apellido, email, password, rol, celular } = req.body;
-            const { user, accessToken, refreshToken } = await authService.register({ 
+            const { verificationToken } = await authService.register({ 
                 nombre, apellido, email, password, rol, celular
             });
 
+            const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+            await sendVerificationEmail(email, verificationUrl)
+
             return res.status(201).json({
                 status: 'success',
-                message: 'Usuario registrado correctamente',
-                user: user.toPublicJSON(),
-                accessToken,
-                refreshToken
+                message: 'Revisá tu correo para confirmar tu cuenta'
             });
         } catch (error) {
             if (error.message === 'El usuario ya existe') {
@@ -104,6 +104,19 @@ export default class AuthController {
                 return res.status(400).json({ message: error.message });
             }
             return res.status(500).json({ message: error.message });
+        }
+    }
+
+    static verifyEmail = async (req, res) => {
+        try {
+            const { token } = req.params;
+            await authService.verifyEmail(token);
+            return res.status(200).json({ message: 'Cuenta verificada correctamente' });
+        } catch (error) {
+            if (error.message === 'Token inválido o expirado') {
+                return res.status(400).json({ message: error.message });
+            }
+            return res.status(500).json({ message: error.message })
         }
     }
 }

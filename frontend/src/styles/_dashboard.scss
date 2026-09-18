@@ -50,16 +50,19 @@
     .dashboard-card-icon {
         font-size: 2rem;
         margin-bottom: 0.75rem;
+        text-align: center;
     }
 
     .dashboard-card-title {
         font-weight: $font-weight-bold;
         font-size: 15px;
         margin-bottom: 0.25rem;
+        text-align: center;
     }
 
     .dashboard-card-desc {
         font-size: $font-size-sm;
         color: #888;
+        text-align: center;
     }
 }

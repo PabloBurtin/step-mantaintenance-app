@@ -46,7 +46,7 @@ const RemitoPrint = ({ remito }) => {
             <table className='remito-tabla'>
                 <tbody>
                     <tr>
-                        <td className='celda celda-border-bottom'>
+                        <td className='celda celda-border-bottom' colSpan={2}>
                             <strong>Empresa:</strong> {remito.cliente?.nombre}
                         </td>
                     </tr>

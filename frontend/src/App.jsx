@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage.jsx'
 import CrearRemitoPage from './pages/CrearRemitoPage.jsx'
 import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
+import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/register' element={<RegisterPage/>} />
         <Route path='/forgot-password' element={<ForgotPasswordPage/>} />
         <Route path='/reset-password/:token' element={<ResetPasswordPage/>} /> 
+        <Route path='/verify-email/:token' element={<VerifyEmailPage/>} />
 
         <Route path= "/" element={
           <PrivateRoute>

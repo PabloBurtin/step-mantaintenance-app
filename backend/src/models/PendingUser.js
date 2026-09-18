@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+const pendingUserSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: true,
@@ -20,9 +20,9 @@ const userSchema = new mongoose.Schema({
     },
     celular: {
         type: String,
-        trim: true,
+        required: true,
         unique: true,
-        required: true
+        trim: true
     },
     password: {
         type: String,
@@ -30,27 +30,18 @@ const userSchema = new mongoose.Schema({
     },
     rol: {
         type: String,
-        enum: ['admin', 'gerente', 'Supervisor', 'tecnico'],
-        default: 'tecnico'
+        enum: ['admin', 'gerente', 'Supervisor', 'tecnico'], default: 'tecnico'
     },
-    activo: {
-        type: Boolean,
-        default: true
-    },
-    pedidosAsignados: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pedido'
-    }],
-    resetPasswordToken:{
+    verificationToken: {
         type: String,
-        default: null
+        required: true
     },
-    resetPasswordExpires: {
+    expiresAt: {
         type: Date,
-        default: null
+        required: true
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
-const User = mongoose.model('User', userSchema);
+const PendingUser = mongoose.model('PendingUser', pendingUserSchema);
 
-export default User;
+export default PendingUser;

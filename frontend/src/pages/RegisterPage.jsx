@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { Container, Card, Form, Button } from "react-bootstrap";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useAuth } from '../context/AuthContext.jsx';
 import api from "../services/api.js";
 
 const RegisterPage = () => {
@@ -17,7 +15,6 @@ const RegisterPage = () => {
     })
     const [loading, setLoading] = useState(false)
 
-    const { login } = useAuth()
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -39,7 +36,7 @@ const RegisterPage = () => {
 
         setLoading(true)
         try {
-            const { data } = await api.post('/auth/register', {
+            await api.post('/auth/register', {
                 nombre: form.nombre,
                 apellido: form.apellido,
                 email: form.email,
@@ -47,9 +44,11 @@ const RegisterPage = () => {
                 password: form.password,
                 rol: 'tecnico'
             })
-            login(data.user, data.accessToken, data.refreshToken)
-            toast.success('Cuentra creada correctamente')
-            navigate('/')
+           Swal.fire({
+            icon: 'success',
+            title: 'Revisá tu correo',
+            text: 'Te enviamos un link para confirmar tu cuenta.'
+           }).then(() => navigate('/login'))
         } catch (error) {
             Swal.fire({
                 icon: 'error',
