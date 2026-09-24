@@ -9,7 +9,7 @@ const estadoVariant = {
     'Pendiente': 'warning',
     'En curso': 'primary',
     'Finalizado': 'success',
-    'Cancelado': 'secondary'
+    'Cancelado': 'danger'
 }
 
 const PedidoDetailPage = () => {
