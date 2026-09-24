@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { USER_ROLES } from '../constants/index.js';
 
 const userSchema = new mongoose.Schema({
     nombre: {
@@ -30,8 +31,8 @@ const userSchema = new mongoose.Schema({
     },
     rol: {
         type: String,
-        enum: ['admin', 'gerente', 'Supervisor', 'tecnico'],
-        default: 'tecnico'
+        enum: Object.values(USER_ROLES),
+        default: 'Tecnico'
     },
     activo: {
         type: Boolean,

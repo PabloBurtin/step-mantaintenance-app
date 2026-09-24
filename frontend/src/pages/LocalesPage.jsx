@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import localService from "../services/localService.js";
 import clienteService from "../services/clienteService.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { USER_ROLES } from "../constants/index.js";
 
 const initialForm = {
     nombre: '',
@@ -129,7 +130,7 @@ const LocalesPage = () => {
     return (
         <Container>
             <div className="d-flex align-items-center mb-1">
-                <Button variant="link" className="p-0 me-2" onClick={() => navigate('/clientes')}>
+                <Button variant="outline-light" onClick={() => navigate('/clientes')}>
                     ⬅️ Volver
                 </Button>
             </div>
@@ -172,7 +173,7 @@ const LocalesPage = () => {
                                 </td>
                                 <td>
                                     <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(local)}>Editar</Button>
-                                    {user?.rol === 'admin' && (
+                                    {user?.rol === USER_ROLES.ADMIN && (
                                         <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(local.id, local.nombre)}> Eliminar</Button>
                                     )}
                                 </td>

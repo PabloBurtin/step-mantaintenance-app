@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import clienteService from "../services/clienteService.js"
 import { useAuth } from "../context/AuthContext.jsx"
+import { USER_ROLES } from "../constants/index.js"
 
 const initialForm = {
     nombre: '',
@@ -129,7 +130,7 @@ const ClientesPage = () => {
         <Container>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Clientes</h2>
-                {['admin', 'gerente'].includes(user?.rol) && (
+                {[USER_ROLES.ADMIN, USER_ROLES.GERENTE].includes(user?.rol) && (
                     <Button variant="primary" onClick={handleNuevo}>+ Nuevo Cliente</Button>
                 )}
             </div>
@@ -167,7 +168,7 @@ const ClientesPage = () => {
                                     <Button size= "sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(cliente)}>
                                         Editar
                                     </Button>
-                                    {user?.rol === 'admin' && (
+                                    {user?.rol === USER_ROLES.ADMIN && (
                                         <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(cliente.id, cliente.nombre)}>
                                             Eliminar
                                         </Button>

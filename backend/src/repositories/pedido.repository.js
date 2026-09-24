@@ -12,7 +12,12 @@ export default class PedidoRepository {
     }
 
     findPedidoById = async (id) => {
-        const pedido = await this.dao.findById(id);
+        const pedido = await this.dao.model
+        .findById(id)
+        .populate('cliente', 'nombre')
+        .populate('local', 'nombre direccion ubicacionMaps')
+        .populate('asignadoA', 'nombre apellido email')
+        .populate('creadoPor', 'nombre apellido')
         return pedido ? new PedidoDTO(pedido) : null;
     }
 
@@ -43,8 +48,8 @@ export default class PedidoRepository {
         return new PedidoDTO(pedido);
     }
 
-    updateEstado = async (pedidoId, estado) => {
-        const pedido = await this.dao.updateEstado(pedidoId, estado);
+    updateEstado = async (pedidoId, estado, motivoCancelacion = null) => {
+        const pedido = await this.dao.updateEstado(pedidoId, estado, motivoCancelacion);
         return new PedidoDTO(pedido);
     }
 

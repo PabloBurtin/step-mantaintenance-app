@@ -6,6 +6,11 @@ const pedidoService = {
         return data
     },
 
+    getById: async (id) => {
+        const { data } = await api.get(`/pedidos/${id}`)
+        return data
+    },
+
     create: async (pedidoData) => {
         const { data } = await api.post('/pedidos', pedidoData)
         return data
@@ -16,8 +21,8 @@ const pedidoService = {
         return data
     },
 
-    updateEstado: async (id, estado) => {
-        const { data } = await api.patch(`/pedidos/${id}/estado`, { estado })
+    updateEstado: async (id, estado, motivoCancelacion = null) => {
+        const { data } = await api.patch(`/pedidos/${id}/estado`, { estado, motivoCancelacion })
         return data
     },
 

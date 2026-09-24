@@ -2,6 +2,8 @@ import PedidoRepository from "../repositories/pedido.repository.js";
 import ClienteService from "./cliente.service.js";
 import LocalService from "./local.service.js";
 import UserService from "./user.service.js";
+import { sendPedidoAsignadoEmail } from "./email.service.js";
+import { USER_ROLES } from "../constants/index.js";
 
 export default class PedidoService {
     constructor() {
@@ -14,11 +16,13 @@ export default class PedidoService {
     createPedido = async (pedidoData) =>{
         await this.clienteService.getClienteById(pedidoData.cliente);
         if (pedidoData.local) await this.localService.getLocalById(pedidoData.local)
-        await this.userService.getUserById(pedidoData.asignadoA);
+        const tecnico = await this.userService.getUserById(pedidoData.asignadoA);
 
         const pedido = await this.pedidoRepository.createPedido(pedidoData);
 
         await this.pedidoRepository.addPedidoToUsuario(pedidoData.asignadoA, pedido.id);
+
+        await sendPedidoAsignadoEmail(tecnico.email, tecnico.nombre, pedido)
 
         return pedido;
     }
@@ -41,27 +45,35 @@ export default class PedidoService {
 
     getAllPedidos = async (user) => {
         let filtro = {};
-        if (user.rol === 'tecnico') {
+        if (user.rol === USER_ROLES.TECNICO) {
             filtro = { asignadoA: user.id };
-        } else if (user.rol === 'Supervisor') {
+        } else if ([USER_ROLES.SUPERVISOR, USER_ROLES.COMERCIAL].includes(user.rol)) {
             filtro = { $or: [{ creadoPor: user.id }, { asignadoA: user.id }] }
         }
         return await this.pedidoRepository.findAllPedidos(filtro);
     }
 
     updatePedido = async (id, pedidoData) => {
-        await this.getPedidoById(id);
+        const pedidoActual = await this.getPedidoById(id)
 
         if (pedidoData.cliente) await this.clienteService.getClienteById(pedidoData.cliente);
         if (pedidoData.local) await this.localService.getLocalById(pedidoData.local);
         if (pedidoData.asignadoA) await this.userService.getUserById(pedidoData.asignadoA);
 
-        return await this.pedidoRepository.updatePedido(id, pedidoData);
+        const pedidoActualizado = await this.pedidoRepository.updatePedido(id, pedidoData);
+
+        if (pedidoData.asignadoA && pedidoData.asignadoA !== pedidoActual.asignadoA?.toString())
+        {
+            const tecnico = await this.userService.getUserById(pedidoData.asignadoA);
+            await sendPedidoAsignadoEmail(tecnico.email, tecnico.nombre, pedidoActualizado);
+        }
+
+        return pedidoActualizado
     }
 
-    updateEstado = async (id, estado) => {
+    updateEstado = async (id, estado, motivoCancelacion) => {
         await this.getPedidoById(id);
-        return await this.pedidoRepository.updateEstado(id, estado);
+        return await this.pedidoRepository.updateEstado(id, estado, motivoCancelacion);
     }
 
     deletePedido = async (id) => {

@@ -1,5 +1,6 @@
 import BaseDAO from "./base.dao.js";
 import Pedido from "../models/Pedido.js"
+import { PEDIDOS_ESTADOS } from "../constants/index.js";
 
 export default class PedidoDAO extends BaseDAO {
     constructor() {
@@ -22,11 +23,14 @@ export default class PedidoDAO extends BaseDAO {
         }
     }
 
-    updateEstado = async (pedidoId, estado) => {
+    updateEstado = async (pedidoId, estado, motivoCancelacion = null) => {
         try {
             const data = { estado };
-            if (estado === 'Completado' || estado === 'Cancelado') {
+            if (estado === PEDIDOS_ESTADOS.FINALIZADO || estado === PEDIDOS_ESTADOS.CANCELADO) {
                 data.fechaConclusion = new Date();
+            }
+            if (estado === PEDIDOS_ESTADOS.CANCELADO && motivoCancelacion) {
+                data.motivoCancelacion = motivoCancelacion;
             }
             return await this.model.findByIdAndUpdate(
                 pedidoId,

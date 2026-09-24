@@ -15,6 +15,7 @@ export default class PedidoDTO extends BaseDTO {
         this.descripcion = pedido.descripcion || null;
         this.estado = pedido.estado;
         this.fechaConclusion = pedido.fechaConclusion || null;
+        this.motivoCancelacion = pedido.motivoCancelacion || null;
     }
 
     toPublicJSON = () => {
@@ -30,6 +31,7 @@ export default class PedidoDTO extends BaseDTO {
             descripcion: this.descripcion,
             estado: this.estado,
             fechaConclusion: this.fechaConclusion,
+            motivoCancelacion: this.motivoCancelacion,
             createdAt: this.createdAt,
             remitoGenerado: this.remitoGenerado
         }, ['updatedAt'])

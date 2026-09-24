@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Container, Card, Form, Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 import api from "../services/api.js";
+import { USER_ROLES } from "../constants/index.js";
 
 const RegisterPage = () => {
     const [form, setForm] = useState({
@@ -42,7 +43,7 @@ const RegisterPage = () => {
                 email: form.email,
                 celular: form.celular,
                 password: form.password,
-                rol: 'tecnico'
+                rol: USER_ROLES.TECNICO
             })
            Swal.fire({
             icon: 'success',

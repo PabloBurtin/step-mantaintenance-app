@@ -14,6 +14,8 @@ import CrearRemitoPage from './pages/CrearRemitoPage.jsx'
 import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
+import PedidoDetailPage from './pages/PedidoDetailPage.jsx'
+import { USER_ROLES } from './constants/index.js'
 
 function App() {
   return (
@@ -34,10 +36,11 @@ function App() {
           <Route path="clientes" element={<ClientesPage/>} />
           <Route path="locales/:clienteId" element={<LocalesPage/>} />
           <Route path="pedidos" element={<PedidosPage/>} />
+          <Route path="pedidos/:id" element={<PedidoDetailPage/>} />
           <Route path="remitos" element={<RemitosPage/>} />
           <Route path='remitos/nuevo'element={<CrearRemitoPage/>} />
           <Route path="usuarios" element={
-            <PrivateRoute roles={['admin', 'gerente']}>
+            <PrivateRoute roles={[USER_ROLES.ADMIN, USER_ROLES.GERENTE]}>
               <UsuariosPage />
             </PrivateRoute>
             } />

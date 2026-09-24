@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../services/authService.js";
 import logo from '../assets/logo-step.png';
+import { USER_ROLES } from "../constants/index.js";
 
 const Navbar = () => {
     const { user, logout } = useAuth()
@@ -44,7 +45,7 @@ const Navbar = () => {
                         <Nav.Link as={Link} to="/clientes">Clientes</Nav.Link>
                         <Nav.Link as={Link} to="/pedidos">Pedidos</Nav.Link>
                         <Nav.Link as={Link} to="/remitos">Remitos</Nav.Link>
-                        {['admin', 'gerente'].includes(user?.rol) && (
+                        {[USER_ROLES.ADMIN, USER_ROLES.GERENTE].includes(user?.rol) && (
                             <Nav.Link as={Link} to="/usuarios">Usuarios</Nav.Link>
                         )}
                     </Nav>

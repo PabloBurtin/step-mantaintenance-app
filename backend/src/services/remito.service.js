@@ -1,3 +1,4 @@
+import { USER_ROLES } from "../constants/index.js";
 import RemitoRepository from "../repositories/remito.repository.js";
 import ClienteService from "./cliente.service.js";
 import LocalService from "./local.service.js";
@@ -52,7 +53,7 @@ export default class RemitoService {
     }
 
     getAllRemitos = async (user) => {
-        const filtro = user.rol === 'tecnico' ? {creadoPor: user.id} : {};
+        const filtro = user.rol === USER_ROLES.TECNICO ? {creadoPor: user.id} : {};
         return await this.remitoRepository.findAllRemitos(filtro);
     }
 

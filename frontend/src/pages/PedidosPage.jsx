@@ -8,6 +8,7 @@ import clienteService from '../services/clienteService.js'
 import localService from '../services/localService.js'
 import userService from '../services/userService.js'
 import { useAuth } from '../context/AuthContext.jsx'
+import { USER_ROLES, PEDIDOS_ESTADOS } from "../constants/index.js";
 
 const initialForm = {
     cliente: '',
@@ -27,8 +28,8 @@ const estadoVariant = {
 
 const PedidosPage = () => {
     const { user } = useAuth()
-    const esSupervisor = ['admin', 'Supervisor', 'gerente'].includes(user?.rol)
-    const puedeEliminar = user?.rol === 'admin'
+    const esSupervisor = [USER_ROLES.ADMIN, USER_ROLES.GERENTE, USER_ROLES.SUPERVISOR, USER_ROLES.COMERCIAL].includes(user?.rol)
+    const puedeEliminar = user?.rol === USER_ROLES.ADMIN
 
     const [pedidos, setPedidos] = useState([])
     const [clientes, setClientes] = useState([])
@@ -42,6 +43,7 @@ const PedidosPage = () => {
     const [form, setForm] = useState(initialForm)
     const [filtroEstado, setFiltroEstado] = useState('')
     const [filtroTecnico, setFiltroTecnico] = useState('')
+    const [filtroCliente, setFiltroCliente] = useState('')
     const [clienteTieneLocales, setClienteTieneLocales] = useState(false)
 
     const cargarPedidos = async () => {
@@ -142,10 +144,28 @@ const PedidosPage = () => {
 
     const handleEstado = async (id, estado) => {
         try {
-            await pedidoService.updateEstado(id, estado)
+            let motivoCancelacion = null
+            if(estado === PEDIDOS_ESTADOS.CANCELADO) {
+                const result = await Swal.fire({
+                    title: 'Motivo de la cancelación',
+                    input: 'textarea',
+                    inputLabel: 'Describí el motivo',
+                    inputPlaceholder: 'Ingresá el motivo',
+                    showCancelButton: true,
+                    confirmButtonText: 'Cancelar pedido',
+                    cancelButtonText: 'Volver',
+                    inputValidator: (value) => {
+                        if (!value?.trim()) return 'El motivo es obligatorio'
+                    }
+                })
+                if (!result.isConfirmed) return 
+                motivoCancelacion = result.value
+            }
+
+            await pedidoService.updateEstado(id, estado, motivoCancelacion)
             toast.success('Estado actualizado')
             cargarPedidos()
-            if (estado === 'Finalizado') {
+            if (estado === PEDIDOS_ESTADOS.FINALIZADO) {
                 const result = await Swal.fire({
                     title: '¿Crear remito?',
                     text: 'El pedido fue finalizado. ¿Querés generar el remito ahora?',
@@ -159,15 +179,11 @@ const PedidosPage = () => {
                     const clienteId = pedido?.cliente?.id || pedido?.cliente?._id?.toString()
                     const localId = pedido?.local?.id || pedido?.local?._id?.toString() || null
                     const ordenDeCompra = pedido?.ordenDeCompra || null
-                    navigate('/remitos/nuevo', { state: {  clienteId, localId, ordenDeCompra, pedidoId: id } })
+                    navigate('/remitos/nuevo', { state: { clienteId, localId, ordenDeCompra, pedidoId: id } })
                 }
             }
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.response?.data?.message || 'Error al actualizar estado'
-            })
+            toast.error(error.response?.data?.message || 'Error al actualizar el estado')
         }
     }
 
@@ -204,6 +220,7 @@ const PedidosPage = () => {
             const tecnicoId = p.asignadoA?.id || p.asignadoA?._id || p.asignadoA
             if (tecnicoId !== filtroTecnico) return false
         }
+        if (filtroCliente && p.cliente?.id !== filtroCliente) return false
         return true
     })
 
@@ -230,6 +247,10 @@ const PedidosPage = () => {
                         {usuarios.map(u => (
                             <option key={u.id} value={u.id}>{u.nombre} {u.apellido}</option>
                         ))}
+                    </Form.Select>
+                    <Form.Select value={filtroCliente} onChange={e => setFiltroCliente(e.target.value)} className="filtro-cliente">
+                        <option value="">Todos los clientes</option>
+                        {clientes.map(c => (<option key={c.id} value={c.id}>{c.nombre}</option>))}
                     </Form.Select>
                 </div>
             )}
@@ -263,11 +284,15 @@ const PedidosPage = () => {
                                         value={pedido.estado}
                                         onChange={(e) => handleEstado(pedido.id, e.target.value)}
                                         className="select-estado"
+                                        disabled= {
+                                            (user?.rol === USER_ROLES.TECNICO && pedido.estado === PEDIDOS_ESTADOS.FINALIZADO) ||
+                                            (pedido.estado === PEDIDOS_ESTADOS.CANCELADO && ![USER_ROLES.ADMIN, USER_ROLES.GERENTE].includes(user?.rol))
+                                        }
                                     >
                                         <option>Pendiente</option>
                                         <option>En curso</option>
                                         <option>Finalizado</option>
-                                        <option>Cancelado</option>
+                                        {user?.rol !== USER_ROLES.TECNICO && <option>{PEDIDOS_ESTADOS.CANCELADO}</option>}
                                     </Form.Select>
                                 </td>
                                 <td onClick={e => e.stopPropagation()}>

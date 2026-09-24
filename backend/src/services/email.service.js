@@ -73,5 +73,47 @@ export const sendVerificationEmail = async (toEmail, verificationUrl) => {
                 </div>
             </div>
         `
-    }) 
-}
+    })
+};
+
+export const sendPedidoAsignadoEmail = async (toEmail, nombreTecnico, pedido) =>{
+    await transporter.sendMail({
+        from: process.env.SMTP_USER,
+        to: toEmail,
+        subject: `Nuevo pedido asignado - Step Servicios SA`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 520px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                <div style="background-color: #21252b; padding: 24px; text-align: center;">
+                    <img src="${logoBase64}" alt="Step Servicios SA" style="height: 60px;" />
+                </div>
+                <div style="padding: 32px;">
+                    <h2 style="color: #21252b; margin-top: 0;">Tenés un nuevo pedido asignado</h2>
+                    <p style="color:#444;">Hola <strong>${nombreTecnico}</strong>, se te asignó el siguiente pedido:</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background: #f5f5f5;">Número</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${String(pedido.numero || '').padStart(8, '0')}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background: #f5f5f5;">Tipo</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${pedido.tipo}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background: #f5f5f5;">Estado</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${pedido.estado}</td>
+                        </tr>
+                    </table>
+                    <p style="color:#444;">Ingresá a la aplicación para ver los detalles completos del pedido.</p>
+                    <div style="text-align: center; margin: 28px 0;">
+                        <a href="${process.env.FRONTEND_URL}/pedidos/${pedido.id}" style="display: inline-block; padding: 12px 28px; background-color: #caa661; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px;">
+                            Ver pedido
+                        </a>
+                    </div>
+                </div>
+                <div style="background-color: #f5f5f5; padding: 16px; text-align: center; font-size: 12px; color: #888;">
+                    Step Servicios SA - www.stepservicios.com.
+                </div>
+            </div>
+        `
+    });        
+};

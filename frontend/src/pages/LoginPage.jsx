@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Card, Form, Button } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useAuth } from "../context/AuthContext.jsx";
@@ -13,6 +13,7 @@ const LoginPage = () => {
 
     const { login } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -21,7 +22,7 @@ const LoginPage = () => {
         try {
             const data = await authService.login(email, password)
             login(data.user, data.accessToken, data.refreshToken)
-            navigate('/')
+            navigate(location.state?.from || '/')
         } catch (error) {
             Swal.fire({
                 icon: 'error',

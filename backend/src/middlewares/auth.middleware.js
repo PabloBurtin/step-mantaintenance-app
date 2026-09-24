@@ -1,5 +1,6 @@
 import { verifyAccessToken } from '../utils/jwt.js';
 import UserService from '../services/user.service.js';
+import { USER_ROLES } from '../constants/index.js';
 
 const userService = new UserService();
 
@@ -26,28 +27,28 @@ export const verifyToken = async (req, res, next) => {
 };
 
 export const verifyAdmin = (req, res, next) => {
-    if(req.user.rol !== 'admin') {
+    if(req.user.rol !== USER_ROLES.ADMIN) {
         return res.status(403).json({ message: 'Acceso denegado' });
     }
     next();
 };
 
 export const verifySupervisor = (req, res, next) => {
-    if(!['admin', 'Supervisor'].includes(req.user.rol)){
+    if(![USER_ROLES.ADMIN, USER_ROLES.SUPERVISOR, USER_ROLES.COMERCIAL].includes(req.user.rol)){
         return res.status(403).json({ message: 'Acceso denegado' });
     }
     next();
 };
 
 export const verifyAdminGerente = (req, res, next) => {
-    if (!['admin', 'gerente'].includes(req.user.rol)) {
+    if (![USER_ROLES.ADMIN, USER_ROLES.GERENTE].includes(req.user.rol)) {
         return res.status(403).json({ message: 'Acceso denegado' });
     }
     next();
 };
 
 export const verifyGerente = (req, res, next) => {
-    if (!['admin', 'Supervisor', 'gerente'].includes(req.user.rol)) {
+    if (![USER_ROLES.ADMIN, USER_ROLES.GERENTE, USER_ROLES.SUPERVISOR, USER_ROLES.COMERCIAL].includes(req.user.rol)) {
         return res.status(403).json({ message: 'Acceso denegado' })
     }
     next();

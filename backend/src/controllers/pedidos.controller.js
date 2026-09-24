@@ -52,8 +52,8 @@ export default class PedidoController {
 
     static updateEstado = async (req, res) => {
         try {
-            const { estado } = req.body;
-            const pedido = await pedidoService.updateEstado(req.params.id, estado);
+            const { estado, motivoCancelacion } = req.body;
+            const pedido = await pedidoService.updateEstado(req.params.id, estado, motivoCancelacion);
             return res.status(200).json({ status: 'success', data: pedido.toPublicJSON() });;
         } catch (error) {
                   if (error.message === 'Pedido no encontrado') {

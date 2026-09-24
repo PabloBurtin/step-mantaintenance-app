@@ -10,6 +10,7 @@ import clienteService from "../services/clienteService.js";
 import localService from "../services/localService.js";
 import RemitoPrint from "../components/RemitoPrint.jsx";
 import { useAuth } from '../context/AuthContext.jsx'
+import { USER_ROLES } from "../constants/index.js";
 
 const initialForm = {
     cliente: '',
@@ -36,9 +37,10 @@ const RemitoPage = () => {
     const [generandoPDF, setGenerandoPDF] = useState(false)
 
     const { user } = useAuth()
-    const esAdmin = user?.rol === 'admin'
-    const esSupervisorOAdmin = ['admin', 'Supervisor'].includes(user?.rol)
+    const esAdmin = user?.rol === USER_ROLES.ADMIN
 
+    const [filtroCliente, setFiltroCliente] = useState('')
+    
     const location = useLocation()
 
     const sigRef = useRef(null)
@@ -54,7 +56,10 @@ const RemitoPage = () => {
         }
     }
 
-    useEffect(() => { cargarRemitos() }, [])
+    useEffect(() => { 
+        cargarRemitos()
+        clienteServiceget().then(data => setClientes(data.data || data)).catch(() => {})
+     }, [])
 
     useEffect(() =>{
         if (!form.cliente || clientes.length === 0) {
@@ -222,11 +227,25 @@ const RemitoPage = () => {
         }
     }
 
+    const remitosFiltrados = remitos.filter(r => {
+        if (filtroCliente && r.cliente?.id !== filtroCliente) return false
+        return true
+    })
+
     return (
         <Container>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Remitos</h2>
                 <Button variant="primary" onClick={abrirModal}>➕ Nuevo Remito</Button>
+            </div>
+
+            <div className="d-flex gap-3 mb-3">
+                <Form.Select value={filtroCliente} onChange={e => setFiltroCliente(e.target.value)} className="filtro-cliente">
+                    <option value="">Todos los clientes</option>
+                    {clientes.map(c => (
+                        <option key={c.id} value={c.id}>{c.nombre}</option>
+                    ))}
+                </Form.Select>
             </div>
 
             {loading ? (
@@ -243,7 +262,7 @@ const RemitoPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {remitos.map(remito => (
+                        {remitosFiltrados.map(remito => (
                             <tr key={remito.id} className="fila-clickeable" onClick={() => abrirDetalle(remito)}>
                                 <td>{remito.numero}</td>
                                 <td>{remito.fecha ? new Date(remito.fecha).toLocaleDateString('es-AR', { timeZone: 'UTC' }): '-'}</td>

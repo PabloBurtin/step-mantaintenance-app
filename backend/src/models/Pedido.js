@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { PEDIDOS_ESTADOS, PEDIDOS_TIPOS } from '../constants/index.js';
 
 const pedidoSchema = new mongoose.Schema({
     numero:{
@@ -22,7 +23,7 @@ const pedidoSchema = new mongoose.Schema({
     },
     tipo:{
         type: String,
-        enum:['Mantenimiento preventivo', 'Reparación', 'Urgencia'],
+        enum: Object.values(PEDIDOS_TIPOS),
         required: true
     },
     ordenDeCompra:{
@@ -36,9 +37,13 @@ const pedidoSchema = new mongoose.Schema({
     },
     estado:{
         type: String,
-        enum:['Pendiente', 'En curso', 'Finalizado', 'Cancelado'],
+        enum: Object.values(PEDIDOS_ESTADOS),
         default: 'Pendiente',
         required: true
+    },
+    motivoCancelacion:{
+        type: String,
+        default: null
     },
     fechaConclusion:{
         type: Date,

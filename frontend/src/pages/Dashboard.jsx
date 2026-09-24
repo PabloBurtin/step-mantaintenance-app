@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
+import { USER_ROLES } from "../constants/index.js";
 
 const secciones = [
     {
@@ -8,28 +9,28 @@ const secciones = [
         descripcion: 'Gestioná los pedidos de servicio',
         icono: '📋',
         ruta: '/pedidos',
-        roles: ['admin', 'gerente', 'Supervisor', 'tecnico']
+        roles: Object.values(USER_ROLES)
     },
     {
         titulo: 'Remitos',
         descripcion: 'Creá y consulta remitos',
         icono: '🧾',
         ruta: '/remitos',
-        roles: ['admin', 'gerente', 'Supervisor', 'tecnico']
+        roles: Object.values(USER_ROLES)
     },
     {
         titulo: 'Clientes',
         descripcion: 'Administrá los clientes',
         icono: '🏢',
         ruta: '/clientes',
-        roles: ['admin', 'gerente', 'Supervisor', 'tecnico']
+        roles: Object.values(USER_ROLES)
     },
     {
         titulo: 'Usuarios',
         descripcion: 'Gestioná los usuarios del sistema',
         icono: '👥',
         ruta: '/usuarios',
-        roles: ['admin', 'gerente']
+        roles: [USER_ROLES.ADMIN, USER_ROLES.GERENTE]
     }
 ]
 

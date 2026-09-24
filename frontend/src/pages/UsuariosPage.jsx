@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext.jsx";
 import userService from "../services/userService.js";
+import { USER_ROLES } from "../constants/index.js";
 
 const initialForm = {
     nombre: '',
@@ -11,10 +12,10 @@ const initialForm = {
     email: '',
     celular: '',
     password: '',
-    rol: 'tecnico'
+    rol: USER_ROLES.TECNICO
 }
 
-const ROLES = ['admin', 'gerente', 'Supervisor', 'tecnico']
+const ROLES = Object.values(USER_ROLES)
 
 const UsuariosPage = () => {
     const { user: usuarioActual } = useAuth()
@@ -137,10 +138,11 @@ const UsuariosPage = () => {
 
     const badgeRol = (rol) => {
         const clases = {
-            admin: 'badge-rol-admin',
-            gerente: 'badge-rol-gerente',
-            Supervisor: 'badge-rol-supervisor',
-            tecnico: 'badge-rol-tecnico'
+            [USER_ROLES.ADMIN]: 'badge-rol-admin',
+            [USER_ROLES.GERENTE]: 'badge-rol-gerente',
+            [USER_ROLES.SUPERVISOR]: 'badge-rol-supervisor',
+            [USER_ROLES.COMERCIAL]: 'badge-rol-comercial',
+            [USER_ROLES.TECNICO]: 'badge-rol-tecnico'
         }
         return <Badge className={clases[rol] || ''} bg="">{rol}</Badge>
     }
@@ -173,12 +175,12 @@ const UsuariosPage = () => {
                                 <td>{usuario.celular || '-'}</td>
                                 <td>{badgeRol(usuario.rol)}</td>
                                 <td>
-                                    {!(usuarioActual?.rol === 'gerente' && usuario.rol ==='admin') && (
+                                    {!(usuarioActual?.rol === USER_ROLES.GERENTE && usuario.rol ===USER_ROLES.ADMIN) && (
                                         <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(usuario)}>
                                             Editar
                                         </Button>
                                     )}
-                                    {usuarioActual?.rol ==='admin' && (
+                                    {usuarioActual?.rol === USER_ROLES.ADMIN && (
                                         <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(usuario)} disabled={usuario.id === usuarioActual.id}>
                                             Eliminar
                                         </Button>
