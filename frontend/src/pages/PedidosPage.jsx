@@ -128,8 +128,24 @@ const PedidosPage = () => {
                 await pedidoService.update(editando, payload)
                 toast.success('Pedido actualizado')
             } else {
-                await pedidoService.create(payload)
+                const response = await pedidoService.create(payload)
+                const pedidoCreado = response.data
                 toast.success('Pedido creado')
+
+                const tecnico = usuarios.find(u => u.id === form.asignadoA)
+                if(tecnico?.celular) {
+                    try {
+                        const { token } = await pedidoService.getShareToken(pedidoCreado.id)
+                        const url = `${window.location.origin}/pedidos/public/${token}`
+                        const clienteNombre = clientes.find(c => c.id === form.cliente)?.nombre || ''
+                        const numero = String(pedidoCreado.numero).padStart(4, '0')
+                        const mensaje = `Nuevo pedido asignado #${numero} - StepServicios\nCliente: ${clienteNombre}\nTipo: ${pedidoCreado.tipo}\n\nVer pedido: ${url}`
+                        const celular = tecnico.celular.replace(/\D/g, '')
+                        window.open(`https://wa.me/${celular}?text=${encodeURIComponent(mensaje)}`, '_blank')
+                    } catch (error) {
+                        // el mail ya fue enviado, WhatsApp falla silenciosamente
+                    }
+                }
             }
             setShowModal(false)
             cargarPedidos()

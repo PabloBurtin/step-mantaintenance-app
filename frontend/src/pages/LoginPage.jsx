@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Card, Form, Button } from 'react-bootstrap';
+import { Container, Card, Form, Button, InputGroup} from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../services/authService.js";
@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     const { login } = useAuth()
     const navigate = useNavigate()
@@ -55,14 +56,19 @@ const LoginPage = () => {
                         </Form.Group>
                         <Form.Group className="mb-4">
                             <Form.Label>Contraseña</Form.Label>
-                            <Form.Control
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="**********"
-                                required
-                            />
-                        </Form.Group>
+                            <InputGroup>
+                                <Form.Control
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="**********"
+                                    required
+                                />
+                                <Button variant="outline-secondary" onClick={() =>setShowPassword(p => !p)}>
+                                    {showPassword ? 'Ocultar' : 'Ver'}
+                                </Button>
+                            </InputGroup>
+                       </Form.Group>
                         <Button
                             type="submit"
                             variant="primary"

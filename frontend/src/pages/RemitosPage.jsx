@@ -58,7 +58,7 @@ const RemitoPage = () => {
 
     useEffect(() => { 
         cargarRemitos()
-        clienteServiceget().then(data => setClientes(data.data || data)).catch(() => {})
+        clienteService.getAll().then(data => setClientes(data.data || data)).catch(() => {})
      }, [])
 
     useEffect(() =>{
@@ -228,7 +228,7 @@ const RemitoPage = () => {
     }
 
     const remitosFiltrados = remitos.filter(r => {
-        if (filtroCliente && r.cliente?.id !== filtroCliente) return false
+        if (filtroCliente && r.cliente?._id?.toString() !== filtroCliente) return false
         return true
     })
 

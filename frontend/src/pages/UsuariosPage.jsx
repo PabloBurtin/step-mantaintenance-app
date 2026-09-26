@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Button, Modal, Form, Badge } from "react-bootstrap";
+import { Container, Table, Button, Modal, Form, Badge, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -26,6 +26,7 @@ const UsuariosPage = () => {
     const [editando, setEditando] = useState(null)
     const [rolOriginal, setRolOriginal] = useState(null)
     const [form, setForm] = useState(initialForm)
+    const [showPassword, setShowPassword] = useState(false)
 
     const cargarUsuarios = async () => {
         try {
@@ -198,29 +199,36 @@ const UsuariosPage = () => {
                 </Modal.Header>
                 <Form onSubmit={handleGuardar}>
                     <Modal.Body>
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <Form.Label>Nombre</Form.Label>
-                                <Form.Control name="nombre" value={form.nombre} onChange={handleChange} required />
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <Form.Label>Apellido</Form.Label>
-                                <Form.Control name="apellido" value={form.apellido} onChange={handleChange} required />
-                            </div>
-                        </div>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" value={form.email} onChange={handleChange} required />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Celular</Form.Label>
-                            <Form.Control name="celular" value={form.celular} onChange={handleChange} placeholder="5491112345678" />
-                        </Form.Group>
-                        {!editando && (
-                            <Form.Group className="mb-3">
-                                <Form.Label>Contraseña</Form.Label>
-                                <Form.Control type="password" name="password" value={form.password} onChange={handleChange} required />
-                            </Form.Group>
+                        {!editando &&(
+                            <>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <Form.Label>Nombre</Form.Label>
+                                        <Form.Control name="nombre" value={form.nombre} onChange={handleChange} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <Form.Label>Apellido</Form.Label>
+                                        <Form.Control name="apellido" value={form.apellido} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" name="email" value={form.email} onChange={handleChange} required />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Celular</Form.Label>
+                                    <Form.Control name="celular" value={form.celular} onChange={handleChange} placeholder="5491112345678" />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Contraseña</Form.Label>
+                                    <InputGroup>
+                                        <Form.Control type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange} required />
+                                        <Button variant="outline-secondary" onClick={() => setShowPassword(p => !p)}>
+                                            {showPassword ? 'Ocultar' : 'Ver'}
+                                        </Button>
+                                    </InputGroup>
+                                </Form.Group>
+                            </>
                         )}
                         <Form.Group className="mb-3">
                             <Form.Label>Rol</Form.Label>

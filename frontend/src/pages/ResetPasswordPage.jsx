@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Container, Card, Form, Button } from "react-bootstrap";
+import { Container, Card, Form, Button, InputGroup } from "react-bootstrap";
 import Swal from "sweetalert2";
 import authService from "../services/authService.js";
 import logo from '../assets/logo-step.png';
@@ -9,6 +9,8 @@ const ResetPasswordPage = () => {
     const [password, setPassword] = useState('')
     const [confirmar, setConfirmar] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmar, setShowConfirmar] = useState(false)
     const { token } = useParams()
     const navigate = useNavigate()
 
@@ -48,23 +50,33 @@ const ResetPasswordPage = () => {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Nueva contraseña</Form.Label>
-                            <Form.Control
-                                type="password"
+                            <InputGroup>
+                                 <Form.Control
+                                type={showPassword ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="*********"
                                 required
-                            />
+                                />
+                                <Button variant="outline-secondary" onClick={() => setShowPassword(p => !p)}>
+                                    {showPassword ? 'Ocultar' : 'Ver'}
+                                </Button>
+                            </InputGroup>
                         </Form.Group>
                         <Form.Group className="mb-4">
                             <Form.Label>Confirmar contraseña</Form.Label>
-                            <Form.Control
-                                type="password"
+                            <InputGroup>
+                                 <Form.Control
+                                type={showConfirmar ? 'text' : 'password'}
                                 value={confirmar}
                                 onChange={(e) => setConfirmar(e.target.value)}
                                 placeholder="*********"
                                 required
-                            />
+                                />
+                                <Button variant="outline-secondary" onClick={() => setShowConfirmar(p => !p)}>
+                                    {showConfirmar ? 'Ocultar' : 'Ver'}
+                                </Button>
+                            </InputGroup>
                         </Form.Group>
                         <Button
                             type="submit"

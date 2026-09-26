@@ -8,6 +8,7 @@ router.get('/', verifyToken, UserController.getUsers);
 router.get('/:id', verifyToken, UserController.getUserById);
 router.post('/', verifyToken, verifyAdminGerente, UserController.createUser);
 router.put('/:id', verifyToken, verifyAdminGerente, UserController.updateUser);
+router.patch('/perfil',verifyToken, UserController.updatePerfil);
 router.patch('/:id/password', verifyToken, UserController.updatePassword);
 router.patch('/:id/rol', verifyToken, UserController.updateRol)
 router.delete('/:id', verifyToken, verifyAdmin, UserController.deleteUser);

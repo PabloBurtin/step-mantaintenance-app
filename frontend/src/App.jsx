@@ -15,7 +15,9 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import VerifyEmailPage from './pages/VerifyEmailPage.jsx'
 import PedidoDetailPage from './pages/PedidoDetailPage.jsx'
+import PerfilPage from './pages/PerfilPage.jsx'
 import { USER_ROLES } from './constants/index.js'
+import PublicPedidoPage from './pages/PublicPedidoPage.jsx'
 
 function App() {
   return (
@@ -24,7 +26,8 @@ function App() {
         <Route path="/login" element={<LoginPage/>} />
         <Route path='/register' element={<RegisterPage/>} />
         <Route path='/forgot-password' element={<ForgotPasswordPage/>} />
-        <Route path='/reset-password/:token' element={<ResetPasswordPage/>} /> 
+        <Route path='/reset-password/:token' element={<ResetPasswordPage/>} />
+        <Route path='/pedidos/public/:token' element={<PublicPedidoPage/>} /> 
         <Route path='/verify-email/:token' element={<VerifyEmailPage/>} />
 
         <Route path= "/" element={
@@ -37,6 +40,7 @@ function App() {
           <Route path="locales/:clienteId" element={<LocalesPage/>} />
           <Route path="pedidos" element={<PedidosPage/>} />
           <Route path="pedidos/:id" element={<PedidoDetailPage/>} />
+          <Route path='perfil' element={<PerfilPage/>} />
           <Route path="remitos" element={<RemitosPage/>} />
           <Route path='remitos/nuevo'element={<CrearRemitoPage/>} />
           <Route path="usuarios" element={

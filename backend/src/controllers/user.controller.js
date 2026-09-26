@@ -54,6 +54,19 @@ export default class UserController {
         }
     }
 
+    static updatePerfil = async (req, res) =>{
+        try {
+            const { nombre, apellido, email, celular } = req.body;
+            const user = await userService.updateUser(req.user.id, { nombre, apellido, email, celular });
+            return res.status(200).json({ status: 'success', data: user.toPublicJSON() });
+        } catch (error) {
+            if (error.message === 'Usuario no encontrado') {
+                return res.status(404).json ({ status: 'error', message: error.message });
+            }
+            return res.status(500).json({ status: 'error', message: error.message })
+        }
+    }
+
     static updateRol = async (req, res) => {
         try{
             const { rol } = req.body;

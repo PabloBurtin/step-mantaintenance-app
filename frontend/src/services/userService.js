@@ -24,6 +24,16 @@ const userService = {
     delete: async (id) => {
         const { data } = await api.delete(`/users/${id}`)
         return data
+    },
+
+    updatePerfil: async (data) => {
+        const { data: res } = await api.patch('/users/perfil', data)
+        return res
+    },
+
+    updatePassword: async (id, passwordActual, passwordNuevo) => {
+        const { data } = await api.patch(`/users/${id}/password`, { passwordActual, passwordNuevo })
+        return data
     }
 }
 

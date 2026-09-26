@@ -1,4 +1,5 @@
 import api from './api.js'
+import axios from 'axios'
 
 const pedidoService = {
     getAll: async () => {
@@ -28,6 +29,17 @@ const pedidoService = {
 
     delete: async (id) => {
         const { data } = await api.delete(`/pedidos/${id}`)
+        return data
+    },
+
+    getShareToken: async (id) => {
+        const { data } = await api.get(`/pedidos/${id}/share-token`)
+        return data
+    },
+
+    getPublic: async (token) => {
+        const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
+        const { data } = await axios.get (`${baseURL}/pedidos/public/${token}`)
         return data
     }
 }

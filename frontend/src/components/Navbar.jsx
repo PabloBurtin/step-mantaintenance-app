@@ -51,6 +51,10 @@ const Navbar = () => {
                     </Nav>
                     <Nav>
                         <NavDropdown title={`${user?.nombre} ${user?.apellido}`} align="end">
+                            <NavDropdown.Item as={Link} to={"/perfil"}>
+                                Mi Perfil
+                            </NavDropdown.Item>
+                            <NavDropdown.Divider />
                             <NavDropdown.Item onClick={handleLogout}>
                                 Cerrar sesión
                             </NavDropdown.Item>

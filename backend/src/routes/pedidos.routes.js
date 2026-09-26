@@ -6,6 +6,8 @@ import { verifyEstadoChange } from '../middlewares/pedido.middleware.js';
 const router = Router();
 
 router.get('/', verifyToken, PedidoController.getPedidos);
+router.get('/public/:token', PedidoController.getPublicPedido);
+router.get('/:id/share-token', verifyToken, PedidoController.getSharetoken)
 router.get('/:id', verifyToken, PedidoController.getPedidoById);
 router.post('/', verifyToken, verifyGerente, PedidoController.createPedido);
 router.put('/:id', verifyToken, verifyGerente, PedidoController.updatePedido);
