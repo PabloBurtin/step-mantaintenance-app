@@ -76,9 +76,9 @@ const PedidoDetailPage = () => {
                             <Col md={6}>
                                 <small className="text-muted d-block">Dirección</small>
                                 <span className="fw-semibold">
-                                    {pedido.local.direccion.calle}
-                                    {pedido.local.direccion.numero}
-                                    {pedido.local.direccion.localidad}
+                                    {pedido.local.direccion.calle} 
+                                    {pedido.local.direccion.numero} 
+                                    {pedido.local.direccion.localidad} 
                                     {pedido.local.direccion.provincia}
                                 </span>
                             </Col>
