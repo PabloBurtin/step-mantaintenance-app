@@ -141,7 +141,15 @@ const PedidosPage = () => {
                         const numero = String(pedidoCreado.numero).padStart(4, '0')
                         const mensaje = `Nuevo pedido asignado #${numero} - StepServicios\nCliente: ${clienteNombre}\nTipo: ${pedidoCreado.tipo}\n\nVer pedido: ${url}`
                         const celular = tecnico.celular.replace(/\D/g, '')
-                        window.open(`https://wa.me/${celular}?text=${encodeURIComponent(mensaje)}`, '_blank')
+                        const waUrl = `https://wa.me/${celular}?text=${encodeURIComponent(mensaje)}`
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido creado',
+                            html: `<p>Enviá el aviso al técnico por WhatsApp:</p>
+                                <a href="${waUrl}" target="_blank" rel="noreferrer" class="btn btn-success">📲 Enviar por WhatsApp</a>`,
+                                showConfirmButton: false,
+                                showCloseButton: true
+                        })
                     } catch (error) {
                         // el mail ya fue enviado, WhatsApp falla silenciosamente
                     }
