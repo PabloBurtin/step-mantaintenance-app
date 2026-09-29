@@ -41,7 +41,7 @@ const PublicPedidoPage = () => {
                 <div className="auth-logo-container">
                     <img src={logo} alt="Step Servicios SA" className="auth-logo" />
                 </div>
-                <div className="d-flex align-items-center gap-3 mt-1">
+                <div className="d-flex flex-wrap align-items-center gap-3 mt-1">
                     <h3 className="mb-0">Pedido #{String(pedido.numero).padStart(4, '0')}</h3>
                     <Badge bg={estadoVariant[pedido.estado]}>{pedido.estado}</Badge>
                 </div>

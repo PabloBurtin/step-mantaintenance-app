@@ -5,14 +5,17 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 1rem;
 }
 
 .login-card {
-    width: $login-card-width;
+    width: 100%;
+    max-width: $login-card-width;
 }
 
 .register-card {
-    width: $register-card-width;
+    width: 100%;
+    max-width: $register-card-width;
 }
 
 .auth-logo {

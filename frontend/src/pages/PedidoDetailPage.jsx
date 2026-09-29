@@ -39,7 +39,7 @@ const PedidoDetailPage = () => {
 
     return (
         <Container className="py-4">
-            <div className="d-flex align-items-center gap-3 mb-4">
+            <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
                 <Button variant="outline-light" onClick={() => navigate('/pedidos')}>⬅️ Volver</Button>
                 <h2 className="mb-0">Pedido #{String(pedido.numero).padStart(4, '0')}</h2>
                 <Badge bg={estadoVariant[pedido.estado]}>{pedido.estado}</Badge>

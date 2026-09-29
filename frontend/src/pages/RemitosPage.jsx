@@ -239,7 +239,7 @@ const RemitoPage = () => {
                 <Button variant="primary" onClick={abrirModal}>➕ Nuevo Remito</Button>
             </div>
 
-            <div className="d-flex gap-3 mb-3">
+            <div className="d-flex flex-wrap gap-3 mb-3">
                 <Form.Select value={filtroCliente} onChange={e => setFiltroCliente(e.target.value)} className="filtro-cliente">
                     <option value="">Todos los clientes</option>
                     {clientes.map(c => (

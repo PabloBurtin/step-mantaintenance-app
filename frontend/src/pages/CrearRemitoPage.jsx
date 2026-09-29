@@ -108,7 +108,7 @@ const CrearRemitoPage = () => {
 
     return (
         <Container className="py-4 crear-remito-container">
-            <div className="d-flex align-items-center mb-4 gap-3">
+            <div className="d-flex flex-wrap align-items-center mb-4 gap-3">
                 <Button variant="outline-secondary" size="sm" onClick={() => navigate(-1)}>← Volver</Button>
                 <h2 className="mb-0">Nuevo Remito</h2>
             </div>

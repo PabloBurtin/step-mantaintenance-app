@@ -3,9 +3,10 @@
 body{
     background-color: $color-bg;
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     flex-direction: column;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .fila-clickeable{

@@ -258,7 +258,7 @@ const PedidosPage = () => {
             </div>
 
             {esSupervisor && (
-                <div className="d-flex gap-3 mb-3">
+                <div className="d-flex flex-wrap gap-3 mb-3">
                     <Form.Select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} className="filtro-estado">
                         <option value="">Todolos estados</option>
                         <option>Pendiente</option>

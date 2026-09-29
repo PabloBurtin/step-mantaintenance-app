@@ -15,3 +15,11 @@
 .select-estado {
     min-width: $select-estado-min-width;
 }
+
+@media (max-width: 576px) {
+    .filtro-estado,
+    .filtro-tecnico,
+    .filtro-cliente{
+        max-width: 100%;
+    }
+}
