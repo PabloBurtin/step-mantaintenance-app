@@ -19,3 +19,22 @@
 .crear-remito-container {
     max-width: $crear-remito-max-width;
 }
+
+@media (max-width: 991px) {
+    .modal-remito-body {
+        padding: 8px;
+
+        .remito-print {
+            width: 210mm;
+            max-width: none;
+            margin: 0 auto;
+            zoom: 0.6;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .modal-remito-body .remito-print {
+        zoom: 0.4;
+    }
+}

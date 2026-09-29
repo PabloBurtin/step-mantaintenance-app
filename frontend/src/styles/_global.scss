@@ -49,3 +49,13 @@ h1, h2, h3, h4, h5 {
     background-color: $color-tecnico;
     color: $color-white;
 }
+
+@media (max-width: 767px) {
+    input,
+    select,
+    textarea,
+    .form-control,
+    .form-select {
+        font-size: 16px;
+    }
+}
