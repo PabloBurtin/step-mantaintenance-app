@@ -142,9 +142,9 @@ const ClientesPage = () => {
                     <thead className="table-dark">
                         <tr>
                             <th>Nombre</th>
-                            <th>CUIT</th>
-                            <th>Condición IVA</th>
-                            <th>Ciudad</th>
+                            <th className="d-none d-md-table-cell">CUIT</th>
+                            <th className="d-none d-md-table-cell">Condición IVA</th>
+                            <th className="d-none d-md-table-cell">Ciudad</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -153,26 +153,28 @@ const ClientesPage = () => {
                         {clientes.map(cliente => (
                             <tr key={cliente.id}>
                                 <td>{cliente.nombre}</td>
-                                <td>{cliente.cuit}</td>
-                                <td>{cliente.condicionIVA}</td>
-                                <td>{cliente.direccionFiscal?.ciudad}</td>
+                                <td className="d-none d-md-table-cell">{cliente.cuit}</td>
+                                <td className="d-none d-md-table-cell">{cliente.condicionIVA}</td>
+                                <td className="d-none d-md-table-cell">{cliente.direccionFiscal?.ciudad}</td>
                                 <td>
                                     <Badge bg={cliente.activo ? 'success' : 'secondary'}>
                                         {cliente.activo ? 'Activo' : 'Inactivo'}
                                     </Badge>
                                 </td>
                                 <td>
-                                    <Button size="sm" variant="outline-secondary" className="me-2" onClick={() => navigate(`/locales/${cliente.id}`)}>
-                                        Locales
-                                    </Button>
-                                    <Button size= "sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(cliente)}>
-                                        Editar
-                                    </Button>
-                                    {user?.rol === USER_ROLES.ADMIN && (
-                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(cliente.id, cliente.nombre)}>
-                                            Eliminar
+                                    <div className="d-flex flex-wrap gap-1">
+                                        <Button size="sm" variant="outline-secondary" onClick={() => navigate(`/locales/${cliente.id}`)}>
+                                            Locales
                                         </Button>
-                                    )}
+                                        <Button size= "sm" variant="outline-primary" onClick={() => handleEditar(cliente)}>
+                                            Editar
+                                        </Button>
+                                        {user?.rol === USER_ROLES.ADMIN && (
+                                            <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(cliente.id, cliente.nombre)}>
+                                                Eliminar
+                                            </Button>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

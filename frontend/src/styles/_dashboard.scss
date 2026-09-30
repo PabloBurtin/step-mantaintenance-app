@@ -35,7 +35,7 @@
     padding: 1.5rem;
     text-decoration: none;
     color: $color-text;
-    transition: border-color 0.2s ease, box-shadow 0.2 ease, transform 0.15 ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
     cursor: pointer;
     display: block;
     width: 200px;
@@ -64,5 +64,15 @@
         font-size: $font-size-sm;
         color: #888;
         text-align: center;
+    }
+}
+
+@media (max-width: 575px) {
+    .dashboard-welcome {
+        padding: 1.25rem;
+    }
+
+    .dashboard-card {
+        width: 100%;
     }
 }

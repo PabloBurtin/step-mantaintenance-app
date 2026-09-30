@@ -59,3 +59,9 @@ h1, h2, h3, h4, h5 {
         font-size: 16px;
     }
 }
+
+@media (max-width: 575px) {
+    .table > :not(caption) > * > * {
+        padding: 0.4rem 0.5rem;
+    }
+}

@@ -257,7 +257,7 @@ const RemitoPage = () => {
                             <th>#</th>
                             <th>Fecha</th>
                             <th>Cliente</th>
-                            <th>Local</th>
+                            <th className="d-none d-md-table-cell">Local</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -267,7 +267,7 @@ const RemitoPage = () => {
                                 <td>{remito.numero}</td>
                                 <td>{remito.fecha ? new Date(remito.fecha).toLocaleDateString('es-AR', { timeZone: 'UTC' }): '-'}</td>
                                 <td>{remito.cliente?.nombre}</td>
-                                <td>{remito.local?.nombre || '-'}</td>
+                                <td className="d-none d-md-table-cell">{remito.local?.nombre || '-'}</td>
                                 <td onClick={e => e.stopPropagation()}>
                                     {esAdmin && (
                                         <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(remito)}>Eliminar</Button>

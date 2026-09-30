@@ -287,9 +287,9 @@ const PedidosPage = () => {
                         <tr>
                             <th>#</th>
                             <th>Cliente</th>
-                            <th>Local</th>
-                            <th>Asignado a</th>
-                            <th>Tipo</th>
+                            <th className="d-none d-md-table-cell">Local</th>
+                            <th className="d-none d-md-table-cell">Asignado a</th>
+                            <th className="d-none d-md-table-cell">Tipo</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -299,9 +299,9 @@ const PedidosPage = () => {
                             <tr key={pedido.id} className="fila-clickeable" onClick={() => abrirDetalle(pedido)}>
                                 <td>{pedido.numero}</td>
                                 <td>{pedido.cliente?.nombre}</td>
-                                <td>{pedido.local?.nombre || '-'}</td>
-                                <td>{pedido.asignadoA ? `${pedido.asignadoA.nombre} ${pedido.asignadoA.apellido}` : '-'}</td>
-                                <td>{pedido.tipo}</td>
+                                <td className="d-none d-md-table-cell">{pedido.local?.nombre || '-'}</td>
+                                <td className="d-none d-md-table-cell">{pedido.asignadoA ? `${pedido.asignadoA.nombre} ${pedido.asignadoA.apellido}` : '-'}</td>
+                                <td className="d-none d-md-table-cell">{pedido.tipo}</td>
                                 <td onClick={e => e.stopPropagation()}>
                                     <Form.Select
                                         size="sm"
@@ -321,12 +321,12 @@ const PedidosPage = () => {
                                 </td>
                                 <td onClick={e => e.stopPropagation()}>
                                     {esSupervisor && (
-                                        <>
-                                            <Button size="sm" variant="outline-primary" className="me-2" onClick={() => abrirModal(pedido)}> Editar</Button>
+                                        <div className="d-flex flex-wrap gap-1">
+                                            <Button size="sm" variant="outline-primary" onClick={() => abrirModal(pedido)}> Editar</Button>
                                             {puedeEliminar && (
                                                 <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(pedido.id, pedido.numero)}>Eliminar</Button>
                                             )}
-                                        </>
+                                        </div>
                                     )}
                                 </td>
                             </tr>

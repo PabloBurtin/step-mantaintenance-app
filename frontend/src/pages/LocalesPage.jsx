@@ -134,7 +134,7 @@ const LocalesPage = () => {
                     ⬅️ Volver
                 </Button>
             </div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
                 <h2>Locales - {cliente?.nombre}</h2>
                 <Button variant="primary" onClick={handleNuevo}> ➕ Nuevo Local</Button>
             </div>
@@ -154,7 +154,7 @@ const LocalesPage = () => {
                             <th>Nombre</th>
                             <th>Dirección</th>
                             <th>Maps</th>
-                            <th>Estado</th>
+                            <th className="d-none d-md-table-cell">Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -168,14 +168,16 @@ const LocalesPage = () => {
                                         : '-' 
                                     } 
                                 </td>
-                                <td>
+                                <td className="d-none d-md-table-cell">
                                     <Badge bg={local.activo ? 'success' : 'secondary'}>{local.activo ? 'Activo' : 'Inactivo'}</Badge>
                                 </td>
                                 <td>
-                                    <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(local)}>Editar</Button>
-                                    {user?.rol === USER_ROLES.ADMIN && (
-                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(local.id, local.nombre)}> Eliminar</Button>
-                                    )}
+                                    <div className="d-flex flex-wrap gap-1">
+                                        <Button size="sm" variant="outline-primary" onClick={() => handleEditar(local)}>Editar</Button>
+                                        {user?.rol === USER_ROLES.ADMIN && (
+                                            <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(local.id, local.nombre)}> Eliminar</Button>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

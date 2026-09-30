@@ -162,8 +162,8 @@ const UsuariosPage = () => {
                     <thead className="table-dark">
                         <tr>
                             <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Celular</th>
+                            <th className="d-none d-md-table-cell">Email</th>
+                            <th className="d-none d-md-table-cell">Celular</th>
                             <th>Rol</th>
                             <th>Acciones</th>
                         </tr>
@@ -172,20 +172,22 @@ const UsuariosPage = () => {
                         {usuarios.map(usuario => (
                             <tr key={usuario.id}>
                                 <td>{usuario.nombre} {usuario.apellido}</td>
-                                <td>{usuario.email}</td>
-                                <td>{usuario.celular || '-'}</td>
+                                <td className="d-none d-md-table-cell">{usuario.email}</td>
+                                <td className="d-none d-md-table-cell">{usuario.celular || '-'}</td>
                                 <td>{badgeRol(usuario.rol)}</td>
                                 <td>
-                                    {!(usuarioActual?.rol === USER_ROLES.GERENTE && usuario.rol ===USER_ROLES.ADMIN) && (
-                                        <Button size="sm" variant="outline-primary" className="me-2" onClick={() => handleEditar(usuario)}>
-                                            Editar
-                                        </Button>
-                                    )}
-                                    {usuarioActual?.rol === USER_ROLES.ADMIN && (
-                                        <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(usuario)} disabled={usuario.id === usuarioActual.id}>
-                                            Eliminar
-                                        </Button>
-                                    )}
+                                    <div className="d-flex flex-wrap gap-1">
+                                        {!(usuarioActual?.rol === USER_ROLES.GERENTE && usuario.rol ===USER_ROLES.ADMIN) && (
+                                            <Button size="sm" variant="outline-primary" onClick={() => handleEditar(usuario)}>
+                                                Editar
+                                            </Button>
+                                        )}
+                                        {usuarioActual?.rol === USER_ROLES.ADMIN && (
+                                            <Button size="sm" variant="outline-danger" onClick={() => handleEliminar(usuario)} disabled={usuario.id === usuarioActual.id}>
+                                                Eliminar
+                                            </Button>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}
