@@ -47,7 +47,7 @@ const RemitoPrint = ({ remito }) => {
                 <tbody>
                     <tr>
                         <td className='celda celda-border-bottom' colSpan={2}>
-                            <strong>Empresa:</strong> {remito.cliente?.nombre}
+                            <strong>Empresa:</strong> {remito.cliente?.nombre}{remito.local?.nombre ? ` - ${remito.local.nombre}` : ''}
                         </td>
                     </tr>
                     <tr>
