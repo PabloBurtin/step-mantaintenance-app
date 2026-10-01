@@ -120,6 +120,53 @@ const PedidosPage = () => {
         setForm(prev => ({ ...prev, [name]:value }))
     }
 
+    const generarLinkWhatsapp = async ({ id, numero, tipo, clienteNombre, tecnicoId }) => {
+        const tecnico = usuarios.find (u => u.id === tecnicoId)
+        if(!tecnico?.celular) return null
+        const { token } = await pedidoService.getShareToken(id)
+        const url =`${window.location.origin}/pedidos/public/${token}`
+        const mensaje = `Pedido asignado #${String(numero).padStart(4, '0')} - StepServicios\nCliente: ${clienteNombre}\nTipo: ${tipo}\n\nVer pedido: ${url}`
+        const celular = tecnico.celular.replace(/\D/g, '')
+        return `https://wa.me/${celular}?text=${encodeURIComponent(mensaje)}`
+    }
+
+    const mostrarAvisoWhatsapp = (waUrl, titulo, icon = 'success') => {
+        Swal.fire({
+            icon,
+            title: titulo,
+            html: `<p>Enviá el aviso al técnico por WhatsApp:</p>
+            <a href="${waUrl}" target="_blank" rel="noreferrer" class="btn btn-success"> 📲 Enviar por WhatsApp</a>`,
+            showConfirmButton: false,
+            showCloseButton: true
+        })
+    }
+
+    const handleCompartir = async (pedido) => {
+        try {
+            const waUrl = await generarLinkWhatsapp({
+                id: pedido.id,
+                numero: pedido.numero,
+                tipo: pedido.tipo,
+                clienteNombre: pedido.cliente?.nombre || '',
+                tecnicoId: pedido.asignadoA?.id || pedido.asignadoA?._id
+            })
+            if (!waUrl) {
+                toast.warning('El técnico asignado no tiene celular cargado')
+                return
+            }
+            mostrarAvisoWhatsapp(waUrl, 'Compartir pedido', 'info')
+        } catch (error) {
+            toast.error('No se pudo generar el link')
+        }
+    }
+
+    const irACrearRemito = (pedido) =>{
+        const clienteId = pedido?.cliente?.id || pedido?.cliente?._id?.toString()
+        const localId = pedido?.local?.id || pedido?.local?._id?.toString() || null
+        const ordenDeCompra = pedido?.ordenDeCompra || null
+        navigate('/remitos/nuevo', { state: { clienteId, localId, ordenDeCompra, pedidoId: pedido.id } })
+    }
+
     const handleGuardar = async (e) => {
         e.preventDefault()
         try{
@@ -131,28 +178,17 @@ const PedidosPage = () => {
                 const response = await pedidoService.create(payload)
                 const pedidoCreado = response.data
                 toast.success('Pedido creado')
-
-                const tecnico = usuarios.find(u => u.id === form.asignadoA)
-                if(tecnico?.celular) {
-                    try {
-                        const { token } = await pedidoService.getShareToken(pedidoCreado.id)
-                        const url = `${window.location.origin}/pedidos/public/${token}`
-                        const clienteNombre = clientes.find(c => c.id === form.cliente)?.nombre || ''
-                        const numero = String(pedidoCreado.numero).padStart(4, '0')
-                        const mensaje = `Nuevo pedido asignado #${numero} - StepServicios\nCliente: ${clienteNombre}\nTipo: ${pedidoCreado.tipo}\n\nVer pedido: ${url}`
-                        const celular = tecnico.celular.replace(/\D/g, '')
-                        const waUrl = `https://wa.me/${celular}?text=${encodeURIComponent(mensaje)}`
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido creado',
-                            html: `<p>Enviá el aviso al técnico por WhatsApp:</p>
-                                <a href="${waUrl}" target="_blank" rel="noreferrer" class="btn btn-success">📲 Enviar por WhatsApp</a>`,
-                                showConfirmButton: false,
-                                showCloseButton: true
-                        })
-                    } catch (error) {
-                        // el mail ya fue enviado, WhatsApp falla silenciosamente
-                    }
+                try {
+                    const waUrl = await generarLinkWhatsapp({
+                        id: pedidoCreado.id,
+                        numero: pedidoCreado.numero,
+                        tipo: pedidoCreado.tipo,
+                        clienteNombre: clientes.find(c => c.id === form.cliente)?.nombre || '',
+                        tecnicoId: form.asignadoA
+                    })
+                    if (waUrl) mostrarAvisoWhatsapp(waUrl, 'Pedido creado')
+                } catch (error) {
+                    // el mail ya fue enviado, WhatsApp falla silenciosamente
                 }
             }
             setShowModal(false)
@@ -199,11 +235,7 @@ const PedidosPage = () => {
                     cancelButtonText: 'Ahora, no'
                 })
                 if (result.isConfirmed) {
-                    const pedido = pedidos.find(p => p.id === id)
-                    const clienteId = pedido?.cliente?.id || pedido?.cliente?._id?.toString()
-                    const localId = pedido?.local?.id || pedido?.local?._id?.toString() || null
-                    const ordenDeCompra = pedido?.ordenDeCompra || null
-                    navigate('/remitos/nuevo', { state: { clienteId, localId, ordenDeCompra, pedidoId: id } })
+                  irACrearRemito(pedidos.find(p => p.id === id))
                 }
             }
         } catch (error) {
@@ -382,8 +414,16 @@ const PedidosPage = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
+                    {pedidoDetalle?.estado === PEDIDOS_ESTADOS.FINALIZADO && !pedidoDetalle.remitoGenerado && (
+                        <Button variant="success" onClick={() => { setShowDetalle(false); irACrearRemito(pedidoDetalle)}}>
+                            🧾 Crear remito
+                        </Button>
+                    )}
                     {esSupervisor && pedidoDetalle && (
-                        <Button variant="outline-primary" onClick={() => { setShowDetalle(false); abrirModal(pedidoDetalle)}}> Editar</Button>
+                        <>
+                            <Button variant="outline-success" onClick={() => handleCompartir(pedidoDetalle)}> 📲 Compartir</Button>
+                            <Button variant="outline-primary" onClick={() => { setShowDetalle(false); abrirModal(pedidoDetalle)}}>Editar</Button> 
+                        </>
                     )}
                     <Button variant="secondary" onClick={() => setShowDetalle(false)}>Cerrar</Button>
                 </Modal.Footer>
